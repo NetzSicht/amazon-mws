@@ -693,6 +693,11 @@ class MWSClient
                         }
                         if (isset($product['Relationships']['VariationChild'])) {
                             $array['Parentage'] = 'parent';
+                            $array['ChildAsins'] = [];
+
+                            foreach ($product['Relationships']['VariationChild'] as $child) {
+                                $array['ChildAsins'][] = $child['Identifiers']['MarketplaceASIN']['ASIN'];
+                            }
                         }
                         if (isset($product['SalesRankings']['SalesRank'])) {
                             $array['SalesRank'] = $product['SalesRankings']['SalesRank'];

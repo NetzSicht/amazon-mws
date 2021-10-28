@@ -687,18 +687,26 @@ class MWSClient
                             $array['small_image'] = str_replace('._SL75_', '._SL50_', $image);
                             $array['large_image'] = str_replace('._SL75_', '', $image);;
                         }
-                        if (isset($product['Relationships']['VariationParent']['Identifiers']['MarketplaceASIN']['ASIN'])) {
-                            $array['Parentage'] = 'child';
-                            $array['Relationships'] = $product['Relationships']['VariationParent']['Identifiers']['MarketplaceASIN']['ASIN'];
-                        }
-                        if (isset($product['Relationships']['VariationChild'])) {
-                            $array['Parentage'] = 'parent';
-                            $array['ChildAsins'] = [];
 
-                            foreach ($product['Relationships']['VariationChild'] as $child) {
-                                $array['ChildAsins'][] = $child['Identifiers']['MarketplaceASIN']['ASIN'];
+                        if (!isset($product['Relationships']['VariationParent']['Identifiers'])) {
+                            /*
+                             * In some rare cases Amazon does not return this Identifiers information!
+                             * Then, skip the entire block
+                             */
+                            if (isset($product['Relationships']['VariationParent']['Identifiers']['MarketplaceASIN']['ASIN'])) {
+                                $array['Parentage'] = 'child';
+                                $array['Relationships'] = $product['Relationships']['VariationParent']['Identifiers']['MarketplaceASIN']['ASIN'];
+                            }
+                            if (isset($product['Relationships']['VariationChild'])) {
+                                $array['Parentage'] = 'parent';
+                                $array['ChildAsins'] = [];
+
+                                foreach ($product['Relationships']['VariationChild'] as $child) {
+                                    $array['ChildAsins'][] = $child['Identifiers']['MarketplaceASIN']['ASIN'];
+                                }
                             }
                         }
+
                         if (isset($product['SalesRankings']['SalesRank'])) {
                             $array['SalesRank'] = $product['SalesRankings']['SalesRank'];
                         }

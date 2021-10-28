@@ -688,7 +688,7 @@ class MWSClient
                             $array['large_image'] = str_replace('._SL75_', '', $image);;
                         }
 
-                        if (!isset($product['Relationships']['VariationParent']['Identifiers'])) {
+                        if (isset($product['Relationships']['VariationParent']['Identifiers'])) {
                             /*
                              * In some rare cases Amazon does not return this Identifiers information!
                              * Then, skip the entire block
